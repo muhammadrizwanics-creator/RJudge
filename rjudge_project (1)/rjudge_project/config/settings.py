@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # For local work the defaults are fine. For a public site set these as
 # environment variables and never commit the real secret key.
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-only-change-me-before-deploying")
-DEBUG = os.environ.get("DEBUG", "0") == "0"
+DEBUG = os.environ.get("DEBUG", "0") == "1"
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost","rjudgeproject.vercel.app").split(",")
 
 INSTALLED_APPS = [
