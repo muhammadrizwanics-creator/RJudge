@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}{% if problem %}{{ problem.title }}{% else %}Problems{% endif %} - RJudge{% endblock %}
+{% block content %}
+<main class="wrap split">
+ <aside><h2>Problems</h2>
+  <input id="q" type="search" placeholder="Search problems" aria-label="Search problems">
+  <div id="plist">
+  {% for p in problems %}
+   <a class="pi {% if problem and p.pk == problem.pk %}on{% endif %}" href="{% url 'problem_detail' p.pk %}"><span>{% if p.pk in solved %}<i class="tick">&#10003;</i>{% else %}<i class="dot"></i>{% endif %}{{ p.title }}</span><small class="{{ p.difficulty }}">{{ p.difficulty }}</small></a>
+  {% empty %}<p class="mut">No problems have been published yet.</p>{% endfor %}
+  </div>
+ </aside>
+ <div>
+ {% if problem %}
+  <div class="card"><h2>{{ problem.title }} <small class="{{ problem.difficulty }}">{{ problem.difficulty }}</small></h2>
+   <p>{{ problem.statement|linebreaksbr }}</p>
+   {% if problem.input_format %}<h3>Input format</h3><p>{{ problem.input_format|linebreaksbr }}</p>{% endif %}
+   {% if problem.output_format %}<h3>Output format</h3><p>{{ problem.output_format|linebreaksbr }}</p>{% endif %}
+   <h3>Sample input</h3><pre>{{ problem.sample_input }}</pre>
+   <h3>Sample output</h3><pre>{{ problem.sample_output }}</pre>
+   <p class="mut">Time limit: {{ problem.time_limit }} second{{ problem.time_limit|pluralize }} per test.</p><hr>
+   <h3>Submit your solution</h3>
+   {% if user.is_authenticated %}
+   <form method="post" action="{% url 'submit' problem.pk %}" enctype="multipart/form-data" id="submitForm">{% csrf_token %}
+    <label>Choose your file (.c or .py)<input type="file" name="code_file" accept=".c,.py"></label>
+    <label>Or paste your code<textarea class="code" name="code_text" spellcheck="false"></textarea></label>
+    <label>Language for pasted code<select name="language"><option value="c">C</option><option value="python">Python</option></select></label>
+    <button class="btn">Submit</button>
+   </form>
+   {% else %}<p>Please <a href="{% url 'login' %}?next={{ request.path }}">log in</a> to submit.</p>{% endif %}
+   {% if submission %}
+   <div class="res" id="result">
+    <h3 class="{% if submission.verdict == 'AC' %}v-ok{% else %}v-bad{% endif %}">{{ submission.get_verdict_display }}{% if submission.total %} ({{ submission.passed }}/{{ submission.total }} tests){% endif %}</h3>
+    {% if submission.message %}<pre class="msg-pre">{{ submission.message }}</pre>{% endif %}
+    <ul>{% for r in submission.results %}<li style="--i:{{ forloop.counter0 }}" class="{% if r.ok %}ok{% else %}bad{% endif %}"><span>Test {{ r.n }} ({% if r.hidden %}hidden{% else %}sample{% endif %})</span>{{ r.label }}</li>{% endfor %}</ul>
+   </div>
+   {% endif %}
+  </div>
+ {% else %}
+  <div class="card"><h2>Choose a problem</h2><p class="mut">Pick a problem from the list to read it and submit your code.</p></div>
+ {% endif %}
+ </div>
+</main>
+{% endblock %}

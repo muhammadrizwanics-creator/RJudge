@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Register - RJudge{% endblock %}
+{% block content %}
+<main class="auth"><div class="aside"><h2>Join RJudge</h2><p>Make an account to submit solutions, track what you have solved and build your profile.</p></div>
+<div class="formside"><div class="card form"><h2>Create account</h2>
+<form method="post">{% csrf_token %}
+<label>Full name {{ form.name }}</label>{{ form.name.errors }}
+<label>Username <span class="hint">(letters, numbers, @ . + - _)</span>{{ form.username }}</label>{{ form.username.errors }}
+<label>Email {{ form.email }}</label>{{ form.email.errors }}
+<label>University name {{ form.university }}</label>{{ form.university.errors }}
+<label>Password <span class="hint">(at least 8 characters)</span>{{ form.password }}</label>{{ form.password.errors }}
+<button class="btn">Create account</button></form>
+<p>Already registered? <a href="{% url 'login' %}">Log in</a></p></div></div></main>
+{% endblock %}

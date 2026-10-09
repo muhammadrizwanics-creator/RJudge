@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - RJudge{% endblock %}
+{% block content %}
+<main class="wrap">
+<div class="card prof">
+ {% if profile.avatar %}<img class="av" src="{{ profile.avatar.url }}" alt="Profile picture">{% else %}<span class="av">{{ user.first_name|default:user.username|slice:":1"|upper }}</span>{% endif %}
+ <div style="flex:1"><h2>{{ user.first_name|default:user.username }}</h2>
+  <div class="mut">@{{ user.username }} &middot; {{ profile.university }} &middot; {{ user.email }}</div>
+  <form method="post" action="{% url 'avatar' %}" enctype="multipart/form-data">{% csrf_token %}
+   <label>Change profile picture<input type="file" name="avatar" accept="image/*" onchange="this.form.submit()"></label></form></div>
+ <div class="ring"><svg width="110" height="110"><circle class="bg" cx="55" cy="55" r="46"/><circle class="fg" id="fg" cx="55" cy="55" r="46" stroke-dasharray="289.03" stroke-dashoffset="289.03" data-pct="{{ pct }}"/></svg><b>{{ pct }}%</b></div>
+</div>
+<div class="stats">
+ <div class="card stat lift"><b>{{ solved_count }}</b>Problems solved</div>
+ <div class="card stat lift"><b>{{ remaining }}</b>Still to solve</div>
+ <div class="card stat lift"><b>{{ submission_count }}</b>Submissions</div>
+</div>
+<h3>Solved problems</h3>
+<p>{% for p in solved %}<a class="tag" href="{% url 'problem_detail' p.pk %}">&#10003; {{ p.title }}</a>{% empty %}<span class="mut">Nothing solved yet. Open <a href="{% url 'problem_list' %}">Problems</a> and submit your first solution.</span>{% endfor %}</p>
+<h3>Submission history</h3>
+{% if history %}
+<div class="card" style="overflow:auto"><table><tr><th>Time</th><th>Problem</th><th>Language</th><th>Verdict</th><th>Tests</th></tr>
+{% for s in history %}<tr><td>{{ s.created_at|date:"d M Y, H:i" }}</td><td><a href="{% url 'problem_detail' s.problem.pk %}?s={{ s.pk }}">{{ s.problem.title }}</a></td><td>{{ s.get_language_display }}</td><td class="{% if s.verdict == 'AC' %}v-ok{% else %}v-bad{% endif %}">{{ s.get_verdict_display }}</td><td>{{ s.passed }}/{{ s.total }}</td></tr>{% endfor %}
+</table></div>
+{% else %}<p class="mut">No submissions yet.</p>{% endif %}
+</main>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}RJudge - Practice C and Python{% endblock %}
+{% block content %}<section class="hero"><div class="wrap hero-in">
+ <div><h1>Check your C and Python code before your teacher does.</h1>
+ <p class="lead">Write your program in VS Code, upload the file, and RJudge tests it against many cases, including ones you cannot see.</p>
+ <a class="btn light" href="{% url 'problem_list' %}">Start solving</a> <a class="btn ghost-l" href="{% url 'register' %}">Create account</a></div>
+ <div class="card verdict" aria-label="Example result"><b>Example result: Sum of Two Integers</b>
+  <ul><li class="ok" style="--i:0"><span>Test 1 (sample)</span>Passed</li><li class="ok" style="--i:1"><span>Test 2 (sample)</span>Passed</li><li class="ok" style="--i:2"><span>Test 3 (hidden)</span>Passed</li><li class="bad" style="--i:3"><span>Test 4 (hidden)</span>Wrong answer</li></ul>
+  <small>For hidden tests you only see the test number and the verdict, never the input.</small></div>
+</div></section>
+<main>
+<div class="wrap two"><div><h2>How to use RJudge</h2>
+ <ol class="steps"><li>Create an account and log in.</li><li>Open <b>Problems</b> and pick a problem. Read the statement, formats and sample.</li><li>Write your solution in VS Code and save it as <code>.c</code> or <code>.py</code>.</li><li>Choose the file (or paste the code) and press <b>Submit</b>.</li><li>Read the verdict, fix your code and submit again as often as you need.</li><li>Open your <b>Dashboard</b> to see solved problems and past submissions.</li></ol></div>
+ <div><h2>Verdicts explained</h2><dl><dt>Accepted</dt><dd>Every test case passed.</dd><dt>Wrong Answer</dt><dd>Your program ran but printed something different from the expected output.</dd><dt>Compilation Error</dt><dd>The code could not be compiled. Check syntax and missing semicolons.</dd><dt>Runtime Error</dt><dd>The program crashed while running.</dd><dt>Time Limit Exceeded</dt><dd>It took too long, often because of an infinite loop.</dd></dl></div></div>
+<div class="wrap"><h2>Guide for beginners</h2><div class="grid3">
+ <div class="card lift"><h3>Hidden test cases</h3><p>The sample on the page is only one example. Your teacher also keeps secret tests such as zero, negative numbers and large values. A program that just prints the sample answer will fail them, so solve the general problem.</p></div>
+ <div class="card lift"><h3>Input and output</h3><p>Read from the keyboard with <code>scanf</code> in C or <code>input()</code> in Python. Print exactly what the problem asks, with no extra words like "Enter a number:".</p></div>
+ <div class="card lift"><h3>Test yourself first</h3><p>Run your program in VS Code with the sample input. Then try your own edge cases: 0, a negative number, and the largest value from the constraints.</p></div></div></div>
+<div class="wrap"><div class="card about"><h2>About me</h2><p>Hi, I am Rizwan, a BS Computer Science student and web developer. I built RJudge because I love programming and wanted students to practice with instant, honest feedback. Edit this paragraph to tell your own story.</p></div></div>
+</main>
+{% endblock %}

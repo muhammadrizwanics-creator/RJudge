@@ -1,0 +1,26 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}RJudge{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/style.css' %}"></head>
+<body>
+{% with n=request.resolver_match.url_name %}
+<header class="nav">
+ <a class="brand" href="{% url 'index' %}"><svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#12A06B"/><stop offset="1" stop-color="#0A3A2C"/></linearGradient></defs><rect width="36" height="36" rx="10" fill="url(#g)"/><path d="M12 11L6 18l6 7M24 11l6 7-6 7" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.5 18.5l3 3 5-6.5" fill="none" stroke="#F2B544" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>RJudge</span></a>
+ <nav><a href="{% url 'index' %}" class="{% if n == 'index' %}on{% endif %}">Home</a><a href="{% url 'problem_list' %}" class="{% if n == 'problem_list' or n == 'problem_detail' %}on{% endif %}">Problems</a></nav>
+ <div id="auth">
+ {% if user.is_authenticated %}
+  <a href="{% url 'dashboard' %}" class="{% if n == 'dashboard' %}on{% endif %}">{% if user.profile.avatar %}<img class="av sm" src="{{ user.profile.avatar.url }}" alt="">{% else %}<span class="av sm">{{ user.first_name|default:user.username|slice:":1"|upper }}</span>{% endif %}Dashboard</a>
+  <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button type="submit">Log out</button></form>
+ {% else %}
+  <a href="{% url 'login' %}">Log in</a><a class="btn sm" href="{% url 'register' %}">Register</a>
+ {% endif %}
+ </div>
+</header>
+{% endwith %}
+{% for m in messages %}<div class="toast {% if m.tags == 'error' %}bad{% endif %}">{{ m }}</div>{% endfor %}
+{% block content %}{% endblock %}
+<footer>RJudge &middot; Built for practice</footer>
+<script src="{% static 'js/app.js' %}"></script>
+</body></html>
